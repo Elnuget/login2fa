@@ -25,13 +25,11 @@ Route::post('/2fa', [TwoFactorController::class, 'verify'])->name('2fa.verify');
 Route::post('/2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.resend');
 
 
-// Rutas protegidas con autenticación y 2FA
-Route::middleware(['auth', '2fa'])->group(function () {
+Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Ruta al dashboard protegida por 'auth' y '2fa' (sin necesidad de agregar 'auth' o 'verified' de nuevo)
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
