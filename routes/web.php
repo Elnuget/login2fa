@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\Auth\AccountController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +20,9 @@ use App\Http\Controllers\TwoFactorController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::post('/reactivate-account-request', [AccountController::class, 'reactivateRequest'])->name('account.reactivate.request');
+Route::get('/reactivate-account', [AccountController::class, 'showReactivateForm'])->name('account.reactivate');
+Route::post('/reactivate-account', [AccountController::class, 'reactivate'])->name('account.reactivate.submit');
 // Rutas de verificación 2FA sin middleware '2fa'
 Route::get('/2fa', [TwoFactorController::class, 'index'])->name('2fa.index');
 Route::post('/2fa', [TwoFactorController::class, 'verify'])->name('2fa.verify');
