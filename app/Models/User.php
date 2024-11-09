@@ -10,9 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes; // Importar SoftDeletes
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasRoles;
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes; // Usar SoftDeletes
 
     /**
