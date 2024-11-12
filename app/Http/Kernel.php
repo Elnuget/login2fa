@@ -69,6 +69,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Otros middlewares...
         '2fa' => \App\Http\Middleware\TwoFactorAuthenticated::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+
     ];
     
 }

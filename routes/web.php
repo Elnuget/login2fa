@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 
 /*
@@ -39,6 +41,10 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     })->name('dashboard');
 });
 
+Route::middleware(['auth', 'admin', 'verified', '2fa'])->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+});
 
 
 require __DIR__ . '/auth.php';

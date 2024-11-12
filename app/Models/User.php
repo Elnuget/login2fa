@@ -7,15 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\SoftDeletes; // Importar SoftDeletes
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasRoles;
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes; // Usar SoftDeletes
+    use HasRoles, HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -48,11 +47,44 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'two_factor_expires_at' => 'datetime',
-        'last_login_at' => 'datetime', // Cast para last_login_at
+        'last_login_at' => 'datetime',
     ];
 
     /**
-     * Generar código 2FA.
+     * The dates attributes for the model.
+     *
+     * @var array<string>
+     */
+    protected $dates = [
+        'two_factor_expires_at',
+        'last_login_at',
+        'deleted_at',
+    ];
+
+    /**
+     * Check if the user has a specific role.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    /**
+     * Define the relationship with the roles table.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')
+                    ->where('model_type', self::class);
+    }
+
+    /**
+     * Generate a 2FA code.
      */
     public function generate2FACode()
     {
@@ -62,7 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Resetear código 2FA.
+     * Reset the 2FA code.
      */
     public function resetTwoFactorCode()
     {
@@ -72,17 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Actualizar la última fecha de inicio de sesión.
+     * Update the last login date.
      */
     public function updateLastLogin()
     {
         $this->last_login_at = now();
         $this->save();
     }
-
-    protected $dates = [
-        'two_factor_expires_at',
-        'last_login_at', // Incluir last_login_at en fechas
-        'deleted_at', // Incluir deleted_at en fechas
-    ];
 }

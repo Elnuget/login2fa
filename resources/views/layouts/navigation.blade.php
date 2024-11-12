@@ -12,8 +12,29 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <!-- Dashboard Link -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18m-9-9v18" />
+                        </svg>
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+
+                    <!-- Gestión de Usuarios Link with Icon -->
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 15a4 4 0 1 1 8 0M12 3a9 9 0 0 1 9 9M3 12a9 9 0 0 1 9-9m0 18a9 9 0 0 1-9-9M12 21a9 9 0 0 1 9-9" />
+                        </svg>
+                        {{ __('Gestión de Usuarios') }}
+                    </x-nav-link>
+
+                    <!-- Gestión de Roles Link with Icon -->
+                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7h-4V4a1 1 0 0 0-2 0v3H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 11v6m-3-3h6" />
+                        </svg>
+                        {{ __('Gestión de Roles') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -41,7 +62,6 @@
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -70,6 +90,23 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <!-- Responsive Gestión de Usuarios Link with Icon -->
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 15a4 4 0 1 1 8 0M12 3a9 9 0 0 1 9 9M3 12a9 9 0 0 1 9-9m0 18a9 9 0 0 1-9-9M12 21a9 9 0 0 1 9-9" />
+                </svg>
+                {{ __('Gestión de Usuarios') }}
+            </x-responsive-nav-link>
+
+            <!-- Responsive Gestión de Roles Link with Icon -->
+            <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7h-4V4a1 1 0 0 0-2 0v3H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 11v6m-3-3h6" />
+                </svg>
+                {{ __('Gestión de Roles') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -87,7 +124,6 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
