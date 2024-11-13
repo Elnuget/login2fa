@@ -8,11 +8,19 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <!-- Mostrar mensaje de éxito si existe -->
+                @if (session('success'))
+                    <div class="text-green-500 bg-green-100 border border-green-300 p-4 rounded-md mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <a href="{{ route('roles.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 mb-4">
                     <!-- Icono de "+" -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 5a1 1 0 01 1-1v4h4a1 1 0 01 0 2h-4v4a1 1 0 01-2 0v-4H5a1 1 0 01-1-1 0h4V5h2z" clip-rule="evenodd"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
                     Crear Nuevo Rol
                 </a>
                 <table class="min-w-full bg-white dark:bg-gray-700 rounded-lg">

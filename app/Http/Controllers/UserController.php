@@ -16,9 +16,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get(); // Obtener todos los usuarios con sus roles
-        return view('users.index', compact('users'));
+        $users = User::with('roles')->get();
+        return view('users.index', compact('users'))->with('success', 'Mensaje de prueba de éxito');
     }
+    
 
     /**
      * Mostrar el formulario para crear un nuevo usuario.
@@ -41,22 +42,28 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string'], // Validar que se seleccionó un rol
         ]);
-
+    
         // Crear el usuario y asignar el rol
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+    
         // Asignar rol al usuario
         $user->assignRole($request->role);
-
+    
+        // Asegurarse de que el model_type sea correcto en la tabla model_has_roles
+        \DB::table('model_has_roles')
+            ->where('model_id', $user->id)
+            ->where('model_type', 'AppModelsUser') // buscar el valor incorrecto
+            ->update(['model_type' => 'App\Models\User']); // forzar el valor correcto
+    
         event(new Registered($user));
-
+    
         return redirect()->route('users.index')->with('success', 'Usuario creado con éxito');
     }
-
+    
     /**
      * Mostrar el formulario para editar un usuario específico.
      */

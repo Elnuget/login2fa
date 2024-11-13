@@ -80,7 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')
-                    ->where('model_type', self::class);
+            ->where('model_type', self::class);
     }
 
     /**
@@ -111,4 +111,14 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->last_login_at = now();
         $this->save();
     }
+    /**
+     * Get the morph class for the user model.
+     *
+     * @return string
+     */
+    public function getMorphClass()
+    {
+        return self::class;
+    }
+
 }

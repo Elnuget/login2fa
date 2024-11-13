@@ -14,25 +14,27 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <!-- Dashboard Link -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18m-9-9v18" />
+                        <!-- Escritorio Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 4h16v2H4zM4 20h16v-2H4zM9 8h6v8H9z"/>
                         </svg>
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <!-- Gestión de Usuarios Link with Icon -->
+                    <!-- Gestión de Usuarios Link with Group Icon -->
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 15a4 4 0 1 1 8 0M12 3a9 9 0 0 1 9 9M3 12a9 9 0 0 1 9-9m0 18a9 9 0 0 1-9-9M12 21a9 9 0 0 1 9-9" />
+                        <!-- Grupo Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 11c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-8 0c1.1 0 2-.9 2-2S9.1 7 8 7s-2 .9-2 2 .9 2 2 2zm4 2c2.67 0 8 1.34 8 4v2H4v-2c0-2.66 5.33-4 8-4z"/>
                         </svg>
                         {{ __('Gestión de Usuarios') }}
                     </x-nav-link>
 
-                    <!-- Gestión de Roles Link with Icon -->
+                    <!-- Gestión de Roles Link with Person Icon -->
                     <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7h-4V4a1 1 0 0 0-2 0v3H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 11v6m-3-3h6" />
+                        <!-- Persona Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </svg>
                         {{ __('Gestión de Roles') }}
                     </x-nav-link>
@@ -91,20 +93,13 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <!-- Responsive Gestión de Usuarios Link with Icon -->
+            <!-- Responsive Gestión de Usuarios Link with Group Icon -->
             <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 15a4 4 0 1 1 8 0M12 3a9 9 0 0 1 9 9M3 12a9 9 0 0 1 9-9m0 18a9 9 0 0 1-9-9M12 21a9 9 0 0 1 9-9" />
-                </svg>
                 {{ __('Gestión de Usuarios') }}
             </x-responsive-nav-link>
 
-            <!-- Responsive Gestión de Roles Link with Icon -->
+            <!-- Responsive Gestión de Roles Link with Person Icon -->
             <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7h-4V4a1 1 0 0 0-2 0v3H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 11v6m-3-3h6" />
-                </svg>
                 {{ __('Gestión de Roles') }}
             </x-responsive-nav-link>
         </div>
