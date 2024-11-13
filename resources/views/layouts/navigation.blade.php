@@ -21,23 +21,25 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <!-- Gestión de Usuarios Link with Group Icon -->
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                        <!-- Grupo Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 11c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-8 0c1.1 0 2-.9 2-2S9.1 7 8 7s-2 .9-2 2 .9 2 2 2zm4 2c2.67 0 8 1.34 8 4v2H4v-2c0-2.66 5.33-4 8-4z"/>
-                        </svg>
-                        {{ __('Gestión de Usuarios') }}
-                    </x-nav-link>
+                    @if (Auth::user()->hasRole('admin')) <!-- Verifica si el usuario tiene el rol de administrador -->
+                        <!-- Gestión de Usuarios Link with Group Icon -->
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                            <!-- Grupo Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 11c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-8 0c1.1 0 2-.9 2-2S9.1 7 8 7s-2 .9-2 2 .9 2 2 2zm4 2c2.67 0 8 1.34 8 4v2H4v-2c0-2.66 5.33-4 8-4z"/>
+                            </svg>
+                            {{ __('Gestión de Usuarios') }}
+                        </x-nav-link>
 
-                    <!-- Gestión de Roles Link with Person Icon -->
-                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
-                        <!-- Persona Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </svg>
-                        {{ __('Gestión de Roles') }}
-                    </x-nav-link>
+                        <!-- Gestión de Roles Link with Person Icon -->
+                        <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                            <!-- Persona Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            {{ __('Gestión de Roles') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -50,7 +52,7 @@
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -93,15 +95,17 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <!-- Responsive Gestión de Usuarios Link with Group Icon -->
-            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                {{ __('Gestión de Usuarios') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()->hasRole('admin'))
+                <!-- Responsive Gestión de Usuarios Link with Group Icon -->
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                    {{ __('Gestión de Usuarios') }}
+                </x-responsive-nav-link>
 
-            <!-- Responsive Gestión de Roles Link with Person Icon -->
-            <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
-                {{ __('Gestión de Roles') }}
-            </x-responsive-nav-link>
+                <!-- Responsive Gestión de Roles Link with Person Icon -->
+                <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                    {{ __('Gestión de Roles') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
