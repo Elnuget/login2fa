@@ -6,6 +6,7 @@ use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CursoController;
 
 
 /*
@@ -44,6 +45,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 Route::middleware(['auth', 'admin', 'verified', '2fa'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
+    Route::resource('cursos', CursoController::class);
 });
 
 

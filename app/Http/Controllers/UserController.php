@@ -19,7 +19,6 @@ class UserController extends Controller
         $users = User::with('roles')->get();
         return view('users.index', compact('users'))->with('success', 'Mensaje de prueba de éxito');
     }
-    
 
     /**
      * Mostrar el formulario para crear un nuevo usuario.
@@ -40,30 +39,34 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['nullable', 'string', 'max:15'], // Validación del número de celular
+            'birth_date' => ['nullable', 'date'], // Validación de la fecha de nacimiento
             'role' => ['required', 'string'], // Validar que se seleccionó un rol
         ]);
-    
+
         // Crear el usuario y asignar el rol
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone, // Guardar número de celular
+            'birth_date' => $request->birth_date, // Guardar fecha de nacimiento
         ]);
-    
+
         // Asignar rol al usuario
         $user->assignRole($request->role);
-    
+
         // Asegurarse de que el model_type sea correcto en la tabla model_has_roles
         \DB::table('model_has_roles')
             ->where('model_id', $user->id)
             ->where('model_type', 'AppModelsUser') // buscar el valor incorrecto
             ->update(['model_type' => 'App\Models\User']); // forzar el valor correcto
-    
+
         event(new Registered($user));
-    
+
         return redirect()->route('users.index')->with('success', 'Usuario creado con éxito');
     }
-    
+
     /**
      * Mostrar el formulario para editar un usuario específico.
      */
@@ -83,6 +86,8 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['nullable', 'string', 'max:15'], // Validación del número de celular
+            'birth_date' => ['nullable', 'date'], // Validación de la fecha de nacimiento
             'role' => ['required', 'string'], // Validar que se seleccionó un rol
         ]);
 
@@ -91,6 +96,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
+            'phone' => $request->phone, // Actualizar número de celular
+            'birth_date' => $request->birth_date, // Actualizar fecha de nacimiento
         ]);
 
         // Actualizar el rol del usuario

@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable(); // Nueva columna para el número de celular
+            $table->date('birth_date')->nullable(); // Nueva columna para la fecha de nacimiento
             $table->rememberToken();
             $table->timestamps();
             $table->integer('two_factor_code')->nullable();

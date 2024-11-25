@@ -26,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'last_login_at', // Agregar last_login_at como fillable
+        'phone', // Nuevo campo para el número de celular
+        'birth_date', // Nuevo campo para la fecha de nacimiento
     ];
 
     /**
@@ -48,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
         'two_factor_expires_at' => 'datetime',
         'last_login_at' => 'datetime',
+        'birth_date' => 'date', // Cast para la fecha de nacimiento
     ];
 
     /**
@@ -111,6 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->last_login_at = now();
         $this->save();
     }
+
     /**
      * Get the morph class for the user model.
      *
@@ -120,5 +124,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return self::class;
     }
-
 }

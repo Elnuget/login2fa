@@ -31,6 +31,8 @@
                                 class="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left">Nombre</th>
                                 <th class="py-3 px-6 text-left">Email</th>
+                                <th class="py-3 px-6 text-left">Teléfono</th>
+                                <th class="py-3 px-6 text-left">Fecha de Nacimiento</th>
                                 <th class="py-3 px-6 text-left">Rol</th>
                                 <th class="py-3 px-6 text-center">Acciones</th>
                             </tr>
@@ -41,6 +43,8 @@
                                     class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">{{ $user->name }}</td>
                                     <td class="py-3 px-6 text-left">{{ $user->email }}</td>
+                                    <td class="py-3 px-6 text-left">{{ $user->phone }}</td>
+                                    <td class="py-3 px-6 text-left">{{ $user->birth_date }}</td>
                                     <td class="py-3 px-6 text-left">{{ $user->roles->pluck('name')->implode(', ') }}</td>
                                     <td class="py-3 px-6 text-center flex justify-center">
                                         <a href="{{ route('users.edit', $user->id) }}"

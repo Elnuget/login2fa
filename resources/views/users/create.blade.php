@@ -36,6 +36,18 @@
                         </div>
 
                         <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de Celular</label>
+                            <input type="text" name="phone" id="phone"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-gray-100">
+                        </div>
+
+                        <div>
+                            <label for="birth_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Nacimiento</label>
+                            <input type="date" name="birth_date" id="birth_date"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-gray-100">
+                        </div>
+
+                        <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
                             <input type="password" name="password" id="password" required
                                 class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-gray-100"
