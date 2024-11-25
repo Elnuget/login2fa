@@ -37,8 +37,13 @@
                             </svg>
                             {{ __('Cursos') }}
                         </x-nav-link>
-                       
-                        
+                        <x-nav-link :href="route('matriculas.index')" :active="request()->routeIs('matriculas.*')">
+                            <!-- Book Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 4v16c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1H7c-.55 0-1 .45-1 1zm3 0h6v5H9V4zm0 7h6v5H9v-5z"/>
+                            </svg>
+                            {{ __('Matriculas') }}
+                        </x-nav-link>
 
                         <!-- Gestión de Roles Link with Person Icon -->
                         <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
@@ -114,6 +119,9 @@
                     {{ __('Cursos') }}
                 </x-responsive-nav-link>
 
+                <x-responsive-nav-link :href="route('matriculas.index')" :active="request()->routeIs('matriculas.*')">
+                    {{ __('Matriculas') }}
+                </x-responsive-nav-link>
 
                 <!-- Responsive Gestión de Roles Link with Person Icon -->
                 <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\MatriculaController;
 
 
 /*
@@ -31,7 +32,7 @@ Route::get('/2fa', [TwoFactorController::class, 'index'])->name('2fa.index');
 Route::post('/2fa', [TwoFactorController::class, 'verify'])->name('2fa.verify');
 Route::post('/2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.resend');
 
-
+//estudiantes
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,8 +41,10 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::resource('matriculas', MatriculaController::class);
 });
 
+//administrador
 Route::middleware(['auth', 'admin', 'verified', '2fa'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);

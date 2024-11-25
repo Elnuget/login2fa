@@ -59,7 +59,6 @@ class UserController extends Controller
         // Asegurarse de que el model_type sea correcto en la tabla model_has_roles
         \DB::table('model_has_roles')
             ->where('model_id', $user->id)
-            ->where('model_type', 'AppModelsUser') // buscar el valor incorrecto
             ->update(['model_type' => 'App\Models\User']); // forzar el valor correcto
 
         event(new Registered($user));
