@@ -18,16 +18,25 @@
                         <p>{{ $matricula->curso->name }}</p>
                     </div>
                     <div>
-                        <x-label :value="__('Método de Pago')" />
-                        <p>{{ $matricula->metodo_pago }}</p>
+                        <x-label :value="__('Monto Total')" />
+                        <p>{{ $matricula->monto_total }}</p>
                     </div>
                     <div>
-                        <x-label :value="__('Comprobante de Pago')" />
-                        @if ($matricula->comprobante_pago)
-                            <a href="{{ asset('storage/' . $matricula->comprobante_pago) }}" target="_blank">Ver Comprobante</a>
-                        @else
-                            <p>N/A</p>
-                        @endif
+                        <x-label :value="__('Monto Pagado')" />
+                        <p>{{ $matricula->monto_pagado }}</p>
+                    </div>
+                    <div>
+                        <x-label :value="__('Monto Pendiente')" />
+                        <p>{{ $matricula->monto_pendiente }}</p>
+                    </div>
+                    <div>
+                        <x-label :value="__('Estado de la Matrícula')" />
+                        <p>{{ $matricula->estado_matricula }}</p>
+                    </div>
+                    <div>
+                        <a href="{{ route('pagos.index', ['matricula_id' => $matricula->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Ver Detalle de Pagos
+                        </a>
                     </div>
                 </div>
             </div>

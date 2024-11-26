@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Matricula extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'usuario_id',
         'curso_id',
-        'metodo_pago',
-        'comprobante_pago',
+        'monto_total',
+        'estado_matricula',
     ];
 
     public function usuario()
@@ -25,5 +24,28 @@ class Matricula extends Model
     public function curso()
     {
         return $this->belongsTo(Curso::class, 'curso_id');
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class);
+    }
+
+    public function getMontoPagadoAttribute()
+    {
+        return $this->pagos()->where('estado_pago', 'verificado')->sum('monto_pagado');
+    }
+
+    public function getMontoPendienteAttribute()
+    {
+        return $this->monto_total - $this->monto_pagado;
+    }
+
+    public function updateEstadoMatricula()
+    {
+        if ($this->monto_pagado >= $this->monto_total) {
+            $this->estado_matricula = 'completada';
+            $this->save();
+        }
     }
 }

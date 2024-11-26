@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade');
-            $table->string('metodo_pago');
-            $table->string('comprobante_pago')->nullable();
+            $table->decimal('monto_total', 10, 2);
+            $table->enum('estado_matricula', ['pendiente', 'aprobada', 'completada', 'rechazada'])->default('pendiente');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
