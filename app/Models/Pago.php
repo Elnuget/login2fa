@@ -11,11 +11,13 @@ class Pago extends Model
 
     protected $fillable = [
         'matricula_id',
-        'monto_pagado',
+        'monto',
         'fecha_pago',
         'metodo_pago',
         'comprobante_pago',
-        'estado_pago',
+        'totalmente_pagado',
+        'valor_pendiente',
+        'fecha_proximo_pago',
     ];
 
     public function matricula()

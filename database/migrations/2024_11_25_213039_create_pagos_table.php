@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('matricula_id')->constrained('matriculas')->onDelete('cascade');
             $table->string('metodo_pago');
             $table->string('comprobante_pago')->nullable();
-            $table->decimal('monto', 10, 2);
+            $table->decimal('monto', 10, 2)->default(0); // Add default value
             $table->date('fecha_pago');
             $table->boolean('totalmente_pagado')->default(false);
             $table->decimal('valor_pendiente', 10, 2)->nullable();

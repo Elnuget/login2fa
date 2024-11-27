@@ -24,17 +24,25 @@ class PagoController extends Controller
     {
         $request->validate([
             'matricula_id' => 'required|exists:matriculas,id',
-            'monto_pagado' => 'required|numeric',
+            'monto' => 'required|numeric|min:0',
             'fecha_pago' => 'required|date',
             'metodo_pago' => 'required|string',
             'comprobante_pago' => 'nullable|file',
-            'estado_pago' => 'required|in:pendiente,verificado,rechazado',
+            'totalmente_pagado' => 'boolean',
+            'valor_pendiente' => 'nullable|numeric',
+            'fecha_proximo_pago' => 'nullable|date',
         ]);
 
-        $pago = new Pago($request->all());
-        if ($request->hasFile('comprobante_pago')) {
-            $pago->comprobante_pago = $request->file('comprobante_pago')->store('comprobantes');
-        }
+        $pago = new Pago([
+            'matricula_id' => $request->matricula_id,
+            'monto' => $request->monto,
+            'fecha_pago' => $request->fecha_pago,
+            'metodo_pago' => $request->metodo_pago,
+            'comprobante_pago' => $request->hasFile('comprobante_pago') ? $request->file('comprobante_pago')->store('comprobantes') : null,
+            'totalmente_pagado' => $request->totalmente_pagado ?? false,
+            'valor_pendiente' => $request->valor_pendiente,
+            'fecha_proximo_pago' => $request->fecha_proximo_pago,
+        ]);
         $pago->save();
 
         $pago->matricula->updateEstadoMatricula();
@@ -57,17 +65,25 @@ class PagoController extends Controller
     {
         $request->validate([
             'matricula_id' => 'required|exists:matriculas,id',
-            'monto_pagado' => 'required|numeric',
+            'monto' => 'required|numeric|min:0',
             'fecha_pago' => 'required|date',
             'metodo_pago' => 'required|string',
             'comprobante_pago' => 'nullable|file',
-            'estado_pago' => 'required|in:pendiente,verificado,rechazado',
+            'totalmente_pagado' => 'boolean',
+            'valor_pendiente' => 'nullable|numeric',
+            'fecha_proximo_pago' => 'nullable|date',
         ]);
 
-        $pago->fill($request->all());
-        if ($request->hasFile('comprobante_pago')) {
-            $pago->comprobante_pago = $request->file('comprobante_pago')->store('comprobantes');
-        }
+        $pago->fill([
+            'matricula_id' => $request->matricula_id,
+            'monto' => $request->monto,
+            'fecha_pago' => $request->fecha_pago,
+            'metodo_pago' => $request->metodo_pago,
+            'comprobante_pago' => $request->hasFile('comprobante_pago') ? $request->file('comprobante_pago')->store('comprobantes') : null,
+            'totalmente_pagado' => $request->totalmente_pagado ?? false,
+            'valor_pendiente' => $request->valor_pendiente,
+            'fecha_proximo_pago' => $request->fecha_proximo_pago,
+        ]);
         $pago->save();
 
         $pago->matricula->updateEstadoMatricula();

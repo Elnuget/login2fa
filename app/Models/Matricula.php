@@ -33,7 +33,7 @@ class Matricula extends Model
 
     public function getMontoPagadoAttribute()
     {
-        return $this->pagos()->where('estado_pago', 'verificado')->sum('monto_pagado');
+        return $this->pagos()->sum('monto');
     }
 
     public function getMontoPendienteAttribute()

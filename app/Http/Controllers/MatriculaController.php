@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Matricula;
 use App\Models\User;
 use App\Models\Curso;
+use App\Models\Pago;
 use Illuminate\Http\Request;
 
 class MatriculaController extends Controller
@@ -26,7 +27,7 @@ class MatriculaController extends Controller
         } else {
             $usuarios = User::all();
         }
-        $cursos = Curso::all();
+        $cursos = Curso::where('estado', 'activo')->get(); // Filter active courses
         return view('matriculas.create', compact('usuarios', 'cursos'));
     }
 
@@ -41,12 +42,13 @@ class MatriculaController extends Controller
             'curso_id' => 'required|exists:cursos,id',
             'metodo_pago' => 'required|string',
             'comprobante_pago' => 'nullable|file',
-            'precio_curso' => 'required|numeric',
             'fecha_pago' => 'required|date',
-            'totalmente_pagado' => 'required|boolean',
+            'totalmente_pagado' => 'boolean',
+            'anticipo' => 'nullable|numeric',
             'valor_pendiente' => 'nullable|numeric',
             'fecha_proximo_pago' => 'nullable|date',
-            'estado_matricula' => 'required|in:aprobado,rechazado',
+            'estado_matricula' => 'nullable|in:pendiente,aprobado,rechazado',
+            'monto' => 'required|numeric|min:0',
         ]);
 
         // Check for existing enrollment
@@ -57,13 +59,28 @@ class MatriculaController extends Controller
             return redirect()->back()->withErrors(['error' => 'El usuario ya está matriculado en este curso.']);
         }
 
-        $matricula = new Matricula($request->all());
-        if ($request->metodo_pago !== 'efectivo' && $request->hasFile('comprobante_pago')) {
-            $matricula->comprobante_pago = $request->file('comprobante_pago')->store('comprobantes');
-        } else {
-            $matricula->comprobante_pago = null;
-        }
+        $curso = Curso::find($request->curso_id);
+        $matricula = new Matricula([
+            'usuario_id' => $request->usuario_id,
+            'curso_id' => $request->curso_id,
+            'monto_total' => $curso->precio,
+            'estado_matricula' => 'pendiente', // Set default state to 'pendiente'
+        ]);
         $matricula->save();
+
+        $pago = new Pago([
+            'matricula_id' => $matricula->id,
+            'monto' => $request->monto,
+            'fecha_pago' => $request->fecha_pago,
+            'metodo_pago' => $request->metodo_pago,
+            'comprobante_pago' => $request->hasFile('comprobante_pago') ? $request->file('comprobante_pago')->store('comprobantes') : null,
+            'totalmente_pagado' => $request->totalmente_pagado ?? false,
+            'valor_pendiente' => $curso->precio - ($request->anticipo ?? 0),
+            'fecha_proximo_pago' => $request->fecha_proximo_pago,
+        ]);
+        $pago->save();
+
+        $matricula->updateEstadoMatricula();
 
         return redirect()->route('matriculas.index');
     }
@@ -82,7 +99,7 @@ class MatriculaController extends Controller
             return redirect()->route('matriculas.index')->withErrors(['error' => 'No tienes permiso para editar esta matrícula.']);
         }
         $usuarios = User::all();
-        $cursos = Curso::all();
+        $cursos = Curso::where('estado', 'activo')->get(); // Filter active courses
         return view('matriculas.edit', compact('matricula', 'usuarios', 'cursos'));
     }
 
@@ -97,12 +114,13 @@ class MatriculaController extends Controller
             'curso_id' => 'required|exists:cursos,id',
             'metodo_pago' => 'required|string',
             'comprobante_pago' => 'nullable|file|required_if:metodo_pago,!=,efectivo',
-            'precio_curso' => 'required|numeric',
             'fecha_pago' => 'required|date',
-            'totalmente_pagado' => 'required|boolean',
+            'totalmente_pagado' => 'boolean',
+            'anticipo' => 'nullable|numeric',
             'valor_pendiente' => 'nullable|numeric',
             'fecha_proximo_pago' => 'nullable|date',
-            'estado_matricula' => 'required|in:aprobado,rechazado',
+            'estado_matricula' => 'nullable|in:pendiente,aprobado,rechazado',
+            'monto' => 'required|numeric|min:0',
         ]);
 
         // Check for existing enrollment
@@ -114,11 +132,27 @@ class MatriculaController extends Controller
             return redirect()->back()->withErrors(['error' => 'El usuario ya está matriculado en este curso.']);
         }
 
-        $matricula->fill($request->all());
-        if ($request->hasFile('comprobante_pago')) {
-            $matricula->comprobante_pago = $request->file('comprobante_pago')->store('comprobantes');
-        }
+        $curso = Curso::find($request->curso_id);
+        $matricula->fill([
+            'usuario_id' => $request->usuario_id,
+            'curso_id' => $request->curso_id,
+            'estado_matricula' => $request->estado_matricula,
+        ]);
         $matricula->save();
+
+        $pago = new Pago([
+            'matricula_id' => $matricula->id,
+            'monto' => $request->monto,
+            'fecha_pago' => $request->fecha_pago,
+            'metodo_pago' => $request->metodo_pago,
+            'comprobante_pago' => $request->hasFile('comprobante_pago') ? $request->file('comprobante_pago')->store('comprobantes') : null,
+            'totalmente_pagado' => $request->totalmente_pagado ?? false,
+            'valor_pendiente' => $curso->precio - ($request->anticipo ?? 0),
+            'fecha_proximo_pago' => $request->fecha_proximo_pago,
+        ]);
+        $pago->save();
+
+        $matricula->updateEstadoMatricula();
 
         return redirect()->route('matriculas.index');
     }

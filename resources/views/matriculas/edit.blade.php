@@ -33,12 +33,13 @@
                     </div>
                     <div>
                         <x-label for="curso_id" :value="__('Curso')" />
-                        <select name="curso_id" id="curso_id" class="block mt-1 w-full">
+                        <select name="curso_id" id="curso_id" class="block mt-1 w-full" onchange="setCoursePrice()">
                             @foreach ($cursos as $curso)
-                                <option value="{{ $curso->id }}" {{ $matricula->curso_id == $curso->id ? 'selected' : '' }}>{{ $curso->name }}</option>
+                                <option value="{{ $curso->id }}" data-precio="{{ $curso->precio }}" {{ $matricula->curso_id == $curso->id ? 'selected' : '' }}>{{ $curso->name }}</option>
                             @endforeach
                         </select>
                     </div>
+                    <input type="hidden" name="monto" id="monto" value="{{ $matricula->curso->precio }}">
                     <div>
                         <x-label for="metodo_pago" :value="__('Método de Pago')" />
                         <select name="metodo_pago" id="metodo_pago" class="block mt-1 w-full">
@@ -55,28 +56,29 @@
                         @endif
                     </div>
                     <div>
-                        <x-label for="precio_curso" :value="__('Precio del Curso')" />
-                        <input type="number" step="0.01" name="precio_curso" id="precio_curso" class="block mt-1 w-full" value="{{ $matricula->precio_curso }}" required>
-                    </div>
-                    <div>
                         <x-label for="fecha_pago" :value="__('Fecha de Pago')" />
-                        <input type="date" name="fecha_pago" id="fecha_pago" class="block mt-1 w-full" value="{{ $matricula->fecha_pago }}" required>
+                        <input type="date" name="fecha_pago" id="fecha_pago" class="block mt-1 w-full" value="{{ $matricula->fecha_pago ?? \Carbon\Carbon::now('America/Guayaquil')->format('Y-m-d') }}" required onchange="setNextPaymentDate()">
                     </div>
                     <div>
                         <x-label for="totalmente_pagado" :value="__('Totalmente Pagado')" />
-                        <input type="checkbox" name="totalmente_pagado" id="totalmente_pagado" class="block mt-1" value="1" {{ $matricula->totalmente_pagado ? 'checked' : '' }}>
+                        <input type="checkbox" name="totalmente_pagado" id="totalmente_pagado" class="block mt-1" value="1" {{ $matricula->totalmente_pagado ? 'checked' : '' }} onchange="togglePendingFields()">
                     </div>
-                    <div>
+                    <div id="anticipo_div">
+                        <x-label for="anticipo" :value="__('Anticipo')" />
+                        <input type="number" step="0.01" name="anticipo" id="anticipo" class="block mt-1 w-full" value="{{ $matricula->anticipo }}" oninput="calculatePendingAmount()">
+                    </div>
+                    <div id="valor_pendiente_div">
                         <x-label for="valor_pendiente" :value="__('Valor Pendiente')" />
-                        <input type="number" step="0.01" name="valor_pendiente" id="valor_pendiente" class="block mt-1 w-full" value="{{ $matricula->valor_pendiente }}">
+                        <input type="number" step="0.01" name="valor_pendiente" id="valor_pendiente" class="block mt-1 w-full" value="{{ $matricula->valor_pendiente }}" readonly>
                     </div>
-                    <div>
+                    <div id="fecha_proximo_pago_div">
                         <x-label for="fecha_proximo_pago" :value="__('Fecha del Próximo Pago')" />
-                        <input type="date" name="fecha_proximo_pago" id="fecha_proximo_pago" class="block mt-1 w-full" value="{{ $matricula->fecha_proximo_pago }}">
+                        <input type="date" name="fecha_proximo_pago" id="fecha_proximo_pago" class="block mt-1 w-full" value="{{ $matricula->fecha_proximo_pago ?? \Carbon\Carbon::now('America/Guayaquil')->addDays(30)->format('Y-m-d') }}">
                     </div>
                     <div>
                         <x-label for="estado_matricula" :value="__('Estado de la Matrícula')" />
                         <select name="estado_matricula" id="estado_matricula" class="block mt-1 w-full" required>
+                            <option value="pendiente" {{ $matricula->estado_matricula == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                             <option value="aprobado" {{ $matricula->estado_matricula == 'aprobado' ? 'selected' : '' }}>Aprobado</option>
                             <option value="rechazado" {{ $matricula->estado_matricula == 'rechazado' ? 'selected' : '' }}>Rechazado</option>
                         </select>
@@ -90,4 +92,46 @@
             </div>
         </div>
     </div>
+    <script>
+        function setCoursePrice() {
+            var cursoSelect = document.getElementById('curso_id');
+            var selectedOption = cursoSelect.options[cursoSelect.selectedIndex];
+            var precio = selectedOption.getAttribute('data-precio');
+            document.getElementById('monto').value = precio;
+            calculatePendingAmount(precio);
+        }
+        function calculatePendingAmount(precioCurso) {
+            var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+            var valorPendiente = precioCurso - anticipo;
+            document.getElementById('valor_pendiente').value = valorPendiente.toFixed(2);
+        }
+        function togglePendingFields() {
+            var totalmentePagado = document.getElementById('totalmente_pagado').checked;
+            var anticipoDiv = document.getElementById('anticipo_div');
+            var valorPendienteDiv = document.getElementById('valor_pendiente_div');
+            var fechaProximoPagoDiv = document.getElementById('fecha_proximo_pago_div');
+            if (totalmentePagado) {
+                anticipoDiv.style.display = 'none';
+                valorPendienteDiv.style.display = 'none';
+                fechaProximoPagoDiv.style.display = 'none';
+                document.getElementById('valor_pendiente').value = '';
+                document.getElementById('fecha_proximo_pago').value = '';
+            } else {
+                anticipoDiv.style.display = 'block';
+                valorPendienteDiv.style.display = 'block';
+                fechaProximoPagoDiv.style.display = 'block';
+            }
+        }
+        function setNextPaymentDate() {
+            var fechaPago = document.getElementById('fecha_pago').value;
+            var nextPaymentDate = new Date(fechaPago);
+            nextPaymentDate.setDate(nextPaymentDate.getDate() + 30);
+            document.getElementById('fecha_proximo_pago').value = nextPaymentDate.toISOString().split('T')[0];
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            setCoursePrice();
+            togglePendingFields();
+            setNextPaymentDate();
+        });
+    </script>
 </x-app-layout>
